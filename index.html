@@ -1,2 +1,671 @@
-# Yassine
-اصلاح اجهزة التلفاز
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقني تلفاز - مرتيل</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0a1628;
+    --accent: #00d4ff;
+    --accent2: #ff6b00;
+    --surface: #0f2040;
+    --card: #162d4a;
+    --text: #e8f4fd;
+    --muted: #7aa3c0;
+    --glow: 0 0 30px rgba(0,212,255,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--primary);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(0,212,255,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(255,107,0,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,22,40,0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,212,255,0.15);
+  }
+
+  .logo {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--accent);
+    text-shadow: var(--glow);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logo span { color: var(--text); }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 2rem; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-inner { max-width: 700px; }
+
+  .badge {
+    display: inline-block;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--accent);
+    padding: 0.4rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+    animation: fadeDown 0.8s 0.1s ease both;
+  }
+
+  .hero h1 .highlight {
+    color: var(--accent);
+    text-shadow: var(--glow);
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    animation: fadeDown 0.8s 0.2s ease both;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeDown 0.8s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--primary);
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(0,212,255,0.4);
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 40px rgba(0,212,255,0.6);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-3px);
+  }
+
+  /* TV Icon */
+  .tv-icon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite, fadeDown 0.8s ease both;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(0,212,255,0.5));
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* ===== STATS ===== */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding: 3rem 2rem;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .stat { text-align: center; }
+
+  .stat-num {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  /* ===== SERVICES ===== */
+  section {
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-title h2 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title p {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .accent-line {
+    width: 60px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin: 0.8rem auto 0;
+    box-shadow: var(--glow);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    background: var(--card);
+    border: 1px solid rgba(0,212,255,0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(0,212,255,0.08), transparent);
+    border-radius: 50%;
+  }
+
+  .service-card:hover {
+    border-color: rgba(0,212,255,0.4);
+    transform: translateY(-5px);
+    box-shadow: var(--glow);
+  }
+
+  .service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .service-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .service-card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* ===== WHY US ===== */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .why-card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 1.8rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.3s;
+  }
+
+  .why-card:hover {
+    border-color: rgba(255,107,0,0.3);
+    transform: translateY(-3px);
+  }
+
+  .why-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .why-card h3 {
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--accent2);
+  }
+
+  .why-card p {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  /* ===== BRANDS ===== */
+  .brands-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .brands-title {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .brands-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .brand-tag {
+    background: var(--card);
+    border: 1px solid rgba(0,212,255,0.15);
+    padding: 0.6rem 1.4rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+    transition: all 0.3s;
+  }
+
+  .brand-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: var(--glow);
+  }
+
+  /* ===== CONTACT ===== */
+  .contact-section {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-card {
+    background: var(--card);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    box-shadow: var(--glow);
+  }
+
+  .contact-card h2 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-card p {
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .contact-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .whatsapp-btn {
+    background: #25D366;
+    color: white;
+  }
+
+  .whatsapp-btn:hover {
+    background: #1ebe5a;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(37,211,102,0.4);
+  }
+
+  .facebook-btn {
+    background: #1877F2;
+    color: white;
+  }
+
+  .facebook-btn:hover {
+    background: #0d65da;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(24,119,242,0.4);
+  }
+
+  .hours-info {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hours-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .hours-item span:first-child { font-size: 1.2rem; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    z-index: 1;
+  }
+
+  footer strong { color: var(--accent); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .stats { gap: 1.5rem; }
+    .stat-num { font-size: 2rem; }
+    .contact-card { padding: 2rem 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">📺 <span>تقني تلفاز</span> مرتيل</div>
+  <div class="nav-links">
+    <a href="#services">الخدمات</a>
+    <a href="#why">لماذا نحن</a>
+    <a href="#contact">تواصل معنا</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <span class="tv-icon">📺</span>
+    <div class="badge">✅ متوفر في مرتيل</div>
+    <h1>إصلاح التلفاز<br><span class="highlight">بسرعة واحترافية</span></h1>
+    <p>متخصص في إصلاح جميع أنواع وماركات التلفاز<br>خدمة الاستلام والتوصيل داخل مرتيل 🚗</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/212600000000" class="btn-primary">📲 تواصل الآن عبر واتساب</a>
+      <a href="#services" class="btn-secondary">اكتشف خدماتنا</a>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">⚡</div>
+    <div class="stat-label">إصلاح سريع</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">✅</div>
+    <div class="stat-label">ضمان على الإصلاح</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">🚗</div>
+    <div class="stat-label">استلام وتوصيل</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">💯</div>
+    <div class="stat-label">أسعار مناسبة</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-title">
+    <h2>خدماتنا</h2>
+    <p>نصلح جميع أنواع الأعطال</p>
+    <div class="accent-line"></div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-icon">🖥️</span>
+      <h3>شاشة سوداء أو بيضاء</h3>
+      <p>تشخيص وإصلاح مشاكل الشاشة بجميع أنواعها وأسبابها</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🔇</span>
+      <h3>مشكل الصوت</h3>
+      <p>إصلاح انقطاع الصوت أو ضعفه أو تشويشه في التلفاز</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">⚡</span>
+      <h3>التلفاز لا يشتغل</h3>
+      <p>إصلاح مشاكل التشغيل والطاقة الكهربائية</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">📡</span>
+      <h3>مشكل الصورة</h3>
+      <p>إصلاح تشويش الصورة أو ألوانها أو عدم وضوحها</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🔌</span>
+      <h3>لوحة إلكترونية</h3>
+      <p>إصلاح وتغيير القطع الإلكترونية التالفة</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🛠️</span>
+      <h3>جميع الأعطال الأخرى</h3>
+      <p>تشخيص دقيق لأي عطل آخر مهما كان نوعه</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why" style="background: var(--surface); border-radius: 24px; max-width: 1100px;">
+  <div class="section-title">
+    <h2>لماذا تختارنا؟</h2>
+    <p>نقدم خدمة تليق بثقتك</p>
+    <div class="accent-line"></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <span class="why-icon">⚡</span>
+      <h3>سرعة الإصلاح</h3>
+      <p>أغلب الأعطال تُصلح في نفس اليوم أو اليوم الموالي</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">💰</span>
+      <h3>أسعار مناسبة</h3>
+      <p>أسعار عادلة وشفافة بدون رسوم خفية</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🚗</span>
+      <h3>استلام وتوصيل</h3>
+      <p>نأتي إليك لاستلام الجهاز ونعيده إليك بعد الإصلاح</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🔒</span>
+      <h3>ضمان على الإصلاح</h3>
+      <p>نضمن جودة الإصلاح ونلتزم بمعايير احترافية عالية</p>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<div class="brands-section">
+  <p class="brands-title">الماركات التي نصلحها</p>
+  <div class="brands-list">
+    <span class="brand-tag">Samsung</span>
+    <span class="brand-tag">LG</span>
+    <span class="brand-tag">Sony</span>
+    <span class="brand-tag">Hisense</span>
+    <span class="brand-tag">TCL</span>
+    <span class="brand-tag">Philips</span>
+    <span class="brand-tag">Panasonic</span>
+    <span class="brand-tag">Sharp</span>
+    <span class="brand-tag">وجميع الماركات الأخرى ✅</span>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+  <div class="contact-card">
+    <h2>تواصل معنا الآن 👋</h2>
+    <p>تلفازك عنده مشكلة؟ تواصل معنا وسنحل المشكلة بسرعة</p>
+    <div class="contact-btns">
+      <a href="https://wa.me/212600000000" class="contact-btn whatsapp-btn">
+        💬 تواصل عبر واتساب
+      </a>
+      <a href="https://facebook.com" class="contact-btn facebook-btn">
+        📘 صفحتنا على فيسبوك
+      </a>
+    </div>
+    <div class="hours-info">
+      <div class="hours-item">
+        <span>📍</span>
+        <span>مرتيل، المغرب</span>
+      </div>
+      <div class="hours-item">
+        <span>⏰</span>
+        <span>9 صباحاً - 8 مساءً</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <strong>تقني تلفاز مرتيل</strong> — جميع الحقوق محفوظة</p>
+</footer>
+
+</body>
+</html>
